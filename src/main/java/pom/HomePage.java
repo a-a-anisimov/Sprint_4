@@ -5,28 +5,28 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 public class HomePage {
     private WebDriver driver;
 
-    private By topButtonOrder = By.className("Button_Button__ra12g"); //верхняя кнопка Заказать
-
-    private By bottomButtonOrder = By.xpath("//div[@class = 'Home_FinishButton__1_cWm']/button[@class = 'Button_Button__ra12g Button_Middle__1CSJM']"); //нижняя кнопка Заказать
+    private By buttonOrder = By.xpath(".//button[text() = 'Заказать']"); // общий локатор для кнопки Заказать
 
     public HomePage(WebDriver driver) {
+
         this.driver = driver;
     }
 
-    public void chooseButtonOrder(String enterButtonOrder) { //метод для выбора точки входа
-        if (enterButtonOrder == "top") {
-            driver.findElement(topButtonOrder).click();
-        } else if (enterButtonOrder == "bottom") {
-            WebElement element = driver.findElement(bottomButtonOrder);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
-            driver.findElement(bottomButtonOrder).click();
-        } else {
-            System.out.println("Такой кнопки не сущетсвует!");
-        }
+    public List<WebElement> getButtonOrder() { //получение списка c кнопками Заказать
+        return driver.findElements(buttonOrder);
     }
 
-}
+    public void chooseButtonOrder(int index) { //метод для клика по конкретной кнопке Заказать
+        driver.findElement(By.className("App_CookieButton__3cvqF")).click(); //закрытие всплывающего окна с куки
 
+        WebElement element = driver.findElement(buttonOrder);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element); //скролл
+
+        driver.findElements(buttonOrder).get(index).click(); //клик по выбранной кнопке Заказать
+    }
+}
